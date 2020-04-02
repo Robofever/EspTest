@@ -40,4 +40,18 @@ void setup(void) {
 
 void loop(void) {
   server.handleClient();
+  WiFiClient client;
+   char command = client.read(); 
+        
+        
+        if (command == 'H') {
+          
+          
+          Serial.println("Led is now on.");
+        }
+        else if (command == 'L') {
+          
+          
+          Serial.println("Led is now off.");
+        }        
 }
