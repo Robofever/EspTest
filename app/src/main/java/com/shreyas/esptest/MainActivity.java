@@ -9,27 +9,40 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-
 public class MainActivity extends AppCompatActivity {
+    String myString = "H";
+    public void sendData(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Socket socket = new Socket("198.168.4.1", 8080);
+                    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                    oos.writeObject(myString);
+                    oos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        OkHttpClient client = new OkHttpClient();
 
-        final String url = "http://192.168.4.1/power/on";
         Button button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Request.Builder()
-                        .url(url)
-                        .build();
+                sendData();
             }
         });
 
@@ -41,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         conf.preSharedKey = "\""+ networkPass +"\"";
         final WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        assert wifiManager != null;
         wifiManager.addNetwork(conf);
 
         Button button1 = findViewById(R.id.button2);
