@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    Socket socket = new Socket("198.168.4.1", 8080);
+                    Socket socket = new Socket("198.168.4.1", 80);
                     ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                     oos.writeObject(myString);
                     oos.close();
